@@ -60,7 +60,7 @@ Here you can register a user with username, email and face image with base64 enc
 ```
 
 ### POST /recognise
-here you can recognise a user if user exists with face image by POST method. Bofy section is as follows:
+here you can recognise a user if user exists with face image by POST method. Body section is as follows:
 ```code
 {
     "img": <base64-img>

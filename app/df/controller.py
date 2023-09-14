@@ -4,14 +4,14 @@ import pickle
 from deepface import DeepFace
 
 
-def register(identity, img, db_path):
+def register(identity, img, database):
     embedding = DeepFace.represent(img_path=img)
-    if not os.path.exists(db_path):
-        with open(db_path, "wb") as wf:
+    if not os.path.exists(database):
+        with open(database, "wb") as wf:
             obj = [[identity, embedding[0]["embedding"]]]
             pickle.dump(obj, wf)
     else:
-        with open(db_path, "rb+") as f:
+        with open(database, "rb+") as f:
             obj = pickle.load(f)
             obj.append([identity, embedding[0]["embedding"]])
             pickle.dump(obj, f)

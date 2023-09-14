@@ -20,25 +20,25 @@ class Register(Resource):
                 "username": "field required",
                 "email": "field required",
                 "img": "field required",
-            }
+            }, 400
 
-        db_path = os.path.join(
+        database = os.path.join(
             current_app.instance_path, current_app.config["DEEPFACE_DATABASE"]
         )
-        controller.register(body["username"], body["img"], db_path)
+        controller.register(body["username"], body["img"], database)
 
         user = User(username=body["username"], email=body["email"])
         db.session.add(user)
         db.session.commit()
 
-        return {"username": user.username, "email": user.email}
+        return {"username": user.username, "email": user.email}, 201
 
 
 class Recognise(Resource):
     def post(self):
         body = request.get_json()
         if body.get("img") is None:
-            return {"img": "field required"}
+            return {"img": "field required"}, 400
 
         identity = controller.recognise(body["img"], db_path=current_app.instance_path)
 
@@ -46,4 +46,4 @@ class Recognise(Resource):
             user = db.session.query(User).filter(User.username == identity).scalar()
 
             return {"username": user.username, "email": user.email}
-        return {"status": "error", "details": "user details not found"}
+        return {"status": "error", "details": "user details not found"}, 404
